@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "secrets1": {
+      "type": "secrets"
+    },
+    "sqlite1": {
+      "type": "sqlite",
+      "connectionId": "ConnectionStrings:ProjetoFinal_Context",
+      "dynamicId": null
+    },
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql"
+    }
+  }
+}
