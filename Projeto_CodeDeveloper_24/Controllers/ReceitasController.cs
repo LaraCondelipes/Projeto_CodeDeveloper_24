@@ -24,7 +24,8 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Receitas>>> GetReceitas()
         {
-            return await _context.Receitas.ToListAsync();
+            //return await _context.Receitas.Include(x => x.ReceitaIngredientes.Select(z=>z.Ingredientes)).ToListAsync();
+            return await _context.Receitas.Include("ReceitaIngredientes.Ingredientes").ToListAsync();
         }
 
         // GET: api/Receitas/5

@@ -1,10 +1,13 @@
-﻿namespace Projeto_CodeDeveloper_24.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Projeto_CodeDeveloper_24.Models
 {
     public class Ingredientes
     {
-        public int IngredientesId { get; set; }
+        public int Id { get; set; }
         public string? IngredienteName { get; set; }
-        public List<ReceitaIngredientes>? ReceitaIngredientes { get; set; } = [];
-        public int Id { get; internal set; }
+        [JsonIgnore]
+        public List<ReceitaIngredientes> ReceitaIngredientes { get; set; } = [];
+        
     }
 }

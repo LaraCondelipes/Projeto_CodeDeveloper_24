@@ -46,7 +46,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutIngredientes(int id, Ingredientes ingredientes)
         {
-            if (id != ingredientes.IngredientesId)
+            if (id != ingredientes.Id)
             {
                 return BadRequest();
             }
@@ -80,7 +80,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
             _context.Ingredientes.Add(ingredientes);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetIngredientes", new { id = ingredientes.IngredientesId }, ingredientes);
+            return CreatedAtAction("GetIngredientes", new { id = ingredientes.Id }, ingredientes);
         }
 
         // DELETE: api/Ingredientes/5
@@ -101,7 +101,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
 
         private bool IngredientesExists(int id)
         {
-            return _context.Ingredientes.Any(e => e.IngredientesId == id);
+            return _context.Ingredientes.Any(e => e.Id == id);
         }
     }
 }

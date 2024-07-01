@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ProjetoDbContext>(options =>
 builder.Services.AddDbContext<ProjetoDbContext>(options =>
 {
     options.UseSqlite("Data Source=(LocalDB)\\MSSQLLocalDB;Database=Receitas;Integrated Security=sspi;");
+    
 });
 
 
