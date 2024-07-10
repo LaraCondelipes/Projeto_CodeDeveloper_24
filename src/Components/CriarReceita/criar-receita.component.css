@@ -1,0 +1,25 @@
+.form-control {
+  font-size: x-small;
+}
+
+.form-label {
+  font-size: large;
+  padding-bottom: 12%;
+}
+
+.form-label-1 {
+  font-size: large;
+  padding-bottom: 5%;
+}
+
+.form-check-label {
+  padding-bottom: 20%;
+}
+
+.form-check-label-A {
+  padding-bottom: 20%;
+}
+
+.container {
+  margin-top: 5%;
+}

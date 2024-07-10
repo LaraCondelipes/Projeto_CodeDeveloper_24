@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div class="row">
+      <ng-container *ngFor="let item of receitas">
+        <div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card ms-auto" style="width: 20rem; height: 22rem">
+            <img
+              src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
+              class="card-img-top"
+              style="height: 500px"
+              alt="Peixe"
+            />
+            <div class="card-body">
+              <p class="card-text">{{ item.titulo }}</p>
+              <p class="card-text">{{ item.descricao }}</p>
+
+              <a href="#" class="btn btn-outline-success">
+                Visualizar receita
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </body>
+</html>
