@@ -5,36 +5,77 @@ import { Categorias } from '../../app/models/categorias';
 import { CategoriasService } from '../../app/services/categorias.service';
 import { IngredientesService } from '../../app/services/ingredientes.service';
 import { Ingredientes } from '../../app/models/ingredientes';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validator,
+  ReactiveFormsModule,
+  Validators,
+  FormArray,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-criar-receita',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterOutlet, RouterModule],
   templateUrl: './criar-receita.component.html',
   styleUrl: './criar-receita.component.css',
 })
 export class CriarReceitaComponent implements OnInit {
-  @Input() categorias!: Categorias;
+  submitForm: FormGroup;
+  /*   @Input() categorias!: Categorias;
+  model: any;
+  ingredients: any; */
 
   constructor(
     private CategoriasService: CategoriasService,
-    private IngredientesService: IngredientesService
-  ) {}
+    private IngredientesService: IngredientesService,
+    private fb: FormBuilder
+  ) {
+    this.submitForm = this.fb.group({
+      ingredients: this.fb.array([]), // Initialize the FormArray
+    });
+  }
 
   public categoria: Categorias[] = [];
   public ingredientes: Ingredientes[] = [];
 
-  submitForm = new FormGroup({
+  /*   submitForm = new FormGroup({
     ingredienteId: new FormControl(0),
     quantidade: new FormControl(0),
     unidade: new FormControl(''),
-  });
+  }); */
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.addIngredient(); //diciona um grupo inicial de formulários de ingredientes
     this.getAllCategorias();
     //this.getCategoriaById();
     this.getAllIngredientes();
+  }
+
+  // Getter for ingredients FormArray
+  get ingredients(): FormArray {
+    return this.submitForm.get('ingredients') as FormArray;
+  }
+
+  // criar um novo grupo de formulários de ingredientes
+  createIngredient(): FormGroup {
+    return this.fb.group({
+      ingredientId: [null, Validators.required],
+      quantidade: [null, Validators.required],
+      unidade: ['', Validators.required],
+    });
+  }
+  //adicionar um novo grupo de formulários de ingredientes ao FormArray de ingredientes
+  addIngredient(): void {
+    this.ingredients.push(this.createIngredient());
+  }
+
+  //remover um grupo de formulários de ingredientes do FormArray de ingredientes
+  removeIngredient(index: number): void {
+    if (this.ingredients.length > 1) {
+      this.ingredients.removeAt(index);
+    }
   }
 
   getCategoriaById() {
@@ -60,16 +101,18 @@ export class CriarReceitaComponent implements OnInit {
     });
   }
 
-  public testMethod() {
-    console.log('upsssss');
+  onSubmit(): void {
+    if (this.submitForm.valid) {
+      const ingredientsArray = this.submitForm.value.ingredients;
+      console.log(ingredientsArray);
+      // Handle the form submission, e.g., send the array to a server or further process it
+    } else {
+      console.log('Form is invalid');
+    }
   }
 
-  onSubmit() {
-    console.log('ENTROU!!!!!!!!!!!!!!!');
-    console.log(
-      'ingredienteId - ' + this.submitForm.controls.ingredienteId.value
-    );
-    console.log('quantidade - ' + this.submitForm.controls.quantidade.value);
-    console.log('unidade - ' + this.submitForm.controls.unidade.value);
+  getFormValuesAsArray(): any[] {
+    const formValues = this.submitForm.value;
+    return Object.values(formValues); // Transform the form values into an array
   }
 }
