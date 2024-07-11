@@ -15,6 +15,7 @@ namespace Projeto_CodeDeveloper_24.Repository
         {
             return context
                 .Receitas
+                .Include(x => x.ReceitaIngredientes)
                 .ToList();
         }
 
@@ -22,10 +23,11 @@ namespace Projeto_CodeDeveloper_24.Repository
         {
             return context
                 .Receitas
+                .Include(x => x.ReceitaIngredientes)
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        public Receitas? Add(Receitas value) 
+        public Receitas? Add(Receitas value)
         {
             context.Receitas.Add(value);
             context.SaveChanges();

@@ -7,7 +7,7 @@ namespace Projeto_CodeDeveloper_24.Models
         public int Id { get; set; }
         public string? IngredienteName { get; set; }
         [JsonIgnore]
-        public List<ReceitaIngredientes> ReceitaIngredientes { get; set; } = [];
+        public List<ReceitaIngredientes>? ReceitaIngredientes { get; set; } = [];  //FK
         
     }
 }

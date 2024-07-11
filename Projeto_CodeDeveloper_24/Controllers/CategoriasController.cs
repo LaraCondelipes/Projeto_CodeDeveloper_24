@@ -11,47 +11,47 @@ namespace Projeto_CodeDeveloper_24.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReceitasController : ControllerBase
+    public class CategoriasController : ControllerBase
     {
         private readonly ProjetoDbContext _context;
 
-        public ReceitasController(ProjetoDbContext context)
+        public CategoriasController(ProjetoDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Receitas
+        // GET: api/Categorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Receitas>>> GetReceitas()
+        public async Task<ActionResult<IEnumerable<Categorias>>> GetCategorias()
         {
-            return await _context.Receitas.ToListAsync();
+            return await _context.Categorias.ToListAsync();
         }
 
-        // GET: api/Receitas/5
+        // GET: api/Categorias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Receitas>> GetReceitas(int id)
+        public async Task<ActionResult<Categorias>> GetCategorias(int id)
         {
-            var receitas = await _context.Receitas.FindAsync(id);
+            var categorias = await _context.Categorias.FindAsync(id);
 
-            if (receitas == null)
+            if (categorias == null)
             {
                 return NotFound();
             }
 
-            return receitas;
+            return categorias;
         }
 
-        // PUT: api/Receitas/5
+        // PUT: api/Categorias/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReceitas(int id, Receitas receitas)
+        public async Task<IActionResult> PutCategorias(int id, Categorias categorias)
         {
-            if (id != receitas.Id)
+            if (id != categorias.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(receitas).State = EntityState.Modified;
+            _context.Entry(categorias).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReceitasExists(id))
+                if (!CategoriasExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace Projeto_CodeDeveloper_24.Controllers
             return NoContent();
         }
 
-        // POST: api/Receitas
+        // POST: api/Categorias
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Receitas>> PostReceitas(Receitas receitas)
+        public async Task<ActionResult<Categorias>> PostCategorias(Categorias categorias)
         {
-            _context.Receitas.Add(receitas);
+            _context.Categorias.Add(categorias);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReceitas", new { id = receitas.Id }, receitas);
+            return CreatedAtAction("GetCategorias", new { id = categorias.Id }, categorias);
         }
 
-        // DELETE: api/Receitas/5
+        // DELETE: api/Categorias/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReceitas(int id)
+        public async Task<IActionResult> DeleteCategorias(int id)
         {
-            var receitas = await _context.Receitas.FindAsync(id);
-            if (receitas == null)
+            var categorias = await _context.Categorias.FindAsync(id);
+            if (categorias == null)
             {
                 return NotFound();
             }
 
-            _context.Receitas.Remove(receitas);
+            _context.Categorias.Remove(categorias);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ReceitasExists(int id)
+        private bool CategoriasExists(int id)
         {
-            return _context.Receitas.Any(e => e.Id == id);
+            return _context.Categorias.Any(e => e.Id == id);
         }
     }
 }

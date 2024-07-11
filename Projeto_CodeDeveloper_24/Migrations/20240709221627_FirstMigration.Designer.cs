@@ -10,14 +10,28 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Projeto_CodeDeveloper_24.Migrations
 {
     [DbContext(typeof(ProjetoDbContext))]
-    [Migration("20240701175206_alteraçãoTabelaIngredientes")]
-    partial class alteraçãoTabelaIngredientes
+    [Migration("20240709221627_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
+
+            modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.Categorias", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorias");
+                });
 
             modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.Ingredientes", b =>
                 {
@@ -27,9 +41,6 @@ namespace Projeto_CodeDeveloper_24.Migrations
 
                     b.Property<string>("IngredienteName")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("IngredientesId")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -48,12 +59,17 @@ namespace Projeto_CodeDeveloper_24.Migrations
                     b.Property<double?>("Quantidade")
                         .HasColumnType("REAL");
 
+                    b.Property<int?>("ReceitasId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Unidades")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IngredientesId");
+
+                    b.HasIndex("ReceitasId");
 
                     b.ToTable("ReceitaIngredientes");
                 });
@@ -64,8 +80,8 @@ namespace Projeto_CodeDeveloper_24.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Categoria")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CategoriasId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("TEXT");
@@ -81,22 +97,9 @@ namespace Projeto_CodeDeveloper_24.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoriasId");
+
                     b.ToTable("Receitas");
-                });
-
-            modelBuilder.Entity("ReceitaIngredientesReceitas", b =>
-                {
-                    b.Property<int>("ReceitaIngredientesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ReceitasId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ReceitaIngredientesId", "ReceitasId");
-
-                    b.HasIndex("ReceitasId");
-
-                    b.ToTable("ReceitaIngredientesReceitas");
                 });
 
             modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.ReceitaIngredientes", b =>
@@ -105,25 +108,37 @@ namespace Projeto_CodeDeveloper_24.Migrations
                         .WithMany("ReceitaIngredientes")
                         .HasForeignKey("IngredientesId");
 
+                    b.HasOne("Projeto_CodeDeveloper_24.Models.Receitas", "Receitas")
+                        .WithMany("ReceitaIngredientes")
+                        .HasForeignKey("ReceitasId");
+
                     b.Navigation("Ingredientes");
+
+                    b.Navigation("Receitas");
                 });
 
-            modelBuilder.Entity("ReceitaIngredientesReceitas", b =>
+            modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.Receitas", b =>
                 {
-                    b.HasOne("Projeto_CodeDeveloper_24.Models.ReceitaIngredientes", null)
-                        .WithMany()
-                        .HasForeignKey("ReceitaIngredientesId")
+                    b.HasOne("Projeto_CodeDeveloper_24.Models.Categorias", "Categorias")
+                        .WithMany("Receitas")
+                        .HasForeignKey("CategoriasId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Projeto_CodeDeveloper_24.Models.Receitas", null)
-                        .WithMany()
-                        .HasForeignKey("ReceitasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Categorias");
+                });
+
+            modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.Categorias", b =>
+                {
+                    b.Navigation("Receitas");
                 });
 
             modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.Ingredientes", b =>
+                {
+                    b.Navigation("ReceitaIngredientes");
+                });
+
+            modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.Receitas", b =>
                 {
                     b.Navigation("ReceitaIngredientes");
                 });

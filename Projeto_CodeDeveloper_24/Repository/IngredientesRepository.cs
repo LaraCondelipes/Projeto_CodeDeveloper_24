@@ -16,14 +16,14 @@ namespace Projeto_CodeDeveloper_24.Repository
         {
             return Context
                 .Ingredientes
-                .Include(x => x.ReceitaIngredientes)
+               .Include(x => x.ReceitaIngredientes)
                 .ToList();
         }
         public Ingredientes? Get(int id) 
         {
             return Context
-                .Ingredientes   
-                .Include(x => x.ReceitaIngredientes)
+                .Ingredientes
+               .Include(x => x.ReceitaIngredientes)
                 .FirstOrDefault(x => x.Id == id);
         }
         public Ingredientes Add(Ingredientes value) 
