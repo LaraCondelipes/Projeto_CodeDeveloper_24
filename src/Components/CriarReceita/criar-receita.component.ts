@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { RouterModule, Router, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Categorias } from '../../app/models/categorias';
@@ -13,19 +13,29 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-criar-receita',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterOutlet, RouterModule],
   templateUrl: './criar-receita.component.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => CriarReceitaComponent),
+      multi: true,
+    },
+  ],
   styleUrl: './criar-receita.component.css',
 })
+
+///////
 export class CriarReceitaComponent implements OnInit {
   submitForm: FormGroup;
-  /*   @Input() categorias!: Categorias;
+  @Input() categorias!: Categorias;
   model: any;
-  ingredients: any; */
+  /* ingredients: any; */
 
   constructor(
     private CategoriasService: CategoriasService,
@@ -66,10 +76,14 @@ export class CriarReceitaComponent implements OnInit {
       unidade: [''],
     });
   }
+
   //adicionar um novo grupo de formulários de ingredientes ao FormArray de ingredientes
   addIngredient(): void {
     console.log('adding ingredient');
     this.ingredients.push(this.createIngredient());
+    console.log(
+      'dados actuais - ' + JSON.stringify(this.submitForm.value.ingredients)
+    );
   }
 
   //remover um grupo de formulários de ingredientes do FormArray de ingredientes
@@ -78,6 +92,8 @@ export class CriarReceitaComponent implements OnInit {
       this.ingredients.removeAt(index);
     }
   }
+
+  ////////////////////////////
 
   getCategoriaById() {
     //quando o componente carregar, faz a chamada ao servidor
@@ -97,7 +113,7 @@ export class CriarReceitaComponent implements OnInit {
   getAllIngredientes() {
     //quando o componente carregar, faz a chamada ao servidor
     this.IngredientesService.getAll().subscribe((response) => {
-      console.log(response);
+      console.log('Ingredientes da BD - ' + JSON.stringify(response));
       this.ingredientes = response;
     });
   }
@@ -106,9 +122,25 @@ export class CriarReceitaComponent implements OnInit {
     if (this.submitForm.valid) {
       const ingredientsArray = this.submitForm.value.ingredients;
       console.log(ingredientsArray);
+      console.log(this.submitForm);
       // Handle the form submission, e.g., send the array to a server or further process it
     } else {
       console.log('Form is invalid');
     }
+  }
+
+  ingredienteSelecionado = '';
+  onSelectChange(ingrediente: string, index: number) {
+    this.ingredienteSelecionado = ingrediente;
+
+    console.log('length - ' + (this.ingredients.length - 1));
+    console.log('index - ' + index);
+    length = this.ingredients.length - 1;
+    //this.ingredients.at(length).ingredientId = ingrediente;
+    this.submitForm.value.ingredients[index].ingredientId = ingrediente;
+
+    console.log(
+      'dados actuais - ' + JSON.stringify(this.submitForm.value.ingredients)
+    );
   }
 }

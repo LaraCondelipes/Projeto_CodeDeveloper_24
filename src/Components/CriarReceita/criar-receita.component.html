@@ -7,75 +7,103 @@
   <form [formGroup]="submitForm" (ngSubmit)="onSubmit()">
     <div class="container text-center" formArrayName="ingredients">
       <legend class="form-label-1">Ingredientes:</legend>
-      <div *ngFor="let item of ingredientes" [formGroupName]="item.id">
+      <div
+        *ngFor="let item of ingredients.controls; let i = index"
+        [formGroupName]="i"
+      >
         <div class="row">
           <div class="col">
-            <label for="ingredienteId-{{ item.id }}" class="form-label"
+            <label for="ingredienteId-{{ i }}" class="form-label"
               >Ingredientes :</label
             >
-            <div class="form-check">
+
+            <select
+              #ingrediente
+              (change)="onSelectChange(ingrediente.value, i)"
+              class="form-select"
+              aria-label="Default select example"
+            >
+              <option selected>Escolha</option>
+              <option
+                *ngFor="let item of ingredientes"
+                value="{{ item.id }}"
+                id="ingredientId-{{ item.id }}"
+                formControlName="ingredientId"
+              >
+                {{ item.ingredienteName }}
+              </option>
+            </select>
+            <!-- <div class="form-check">
               <input
                 class="form-check-input"
                 type="checkbox"
                 name="criar-receita"
-                id="ingredienteId-{{ item.id }}"
+                id="ingredienteId-{{ i }}"
                 formControlName="ingredientId"
-                value="{{ item.id }}"
+                value="{{ i }}"
                 checked
               />
-              <label class="form-check-label">{{ item.ingredienteName }}</label>
-            </div>
+              <label class="form-check-label">
+                {{ item.ingredienteName }} item</label>
+            </div> -->
           </div>
           <div class="col">
-            <label for="quantidade-{{ item.id }}" class="form-label"
+            <label for="quantidade-{{ i }}" class="form-label"
               >Quantidade :</label
             >
             <input
               type="text"
               class="form-control"
               style="height: 30px; width: 50px"
-              id="quantidade-{{ item.id }}"
+              id="quantidade-{{ i }}"
               formControlName="quantidade"
               placeholder="..."
             />
           </div>
           <div class="col">
-            <label for="unidade-{{ item.id }}" class="form-label"
-              >Unidade :</label
-            >
+            <label for="unidade-{{ i }}" class="form-label">Unidade :</label>
             <input
               type="text"
               class="form-control"
               style="height: 30px; width: 50px"
-              id="unidade-{{ item.id }}"
+              id="unidade-{{ i }}"
               formControlName="unidade"
               placeholder="..."
             />
           </div>
-          <button type="button" (click)="addIngredient()">
-            Add Ingredient
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            (click)="addIngredient()"
+          >
+            Adicionar ingrediente
           </button>
-          <button type="button" (click)="removeIngredient(item.id)">
-            Remove Ingredient
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            (click)="removeIngredient(i)"
+          >
+            Remover Ingrediente
           </button>
+
+          <div class="col">
+            <label for="Textarea">Descrição da Receita:</label>
+            <textarea
+              class="form-control"
+              id="receitaDescricao"
+              rows="3"
+            ></textarea>
+          </div>
         </div>
       </div>
-      <div class="col">
-        <div class="form-group">
-          <label for="Textarea">Descrição da Receita:</label>
-          <textarea
-            class="form-control"
-            id="receitaDescricao"
-            rows="3"
-          ></textarea>
-        </div>
-      </div>
+
+      <button class="btn btn-outline-warning" type="submit">
+        Criar receita
+      </button>
+
+      <button class="btn btn-outline-success" [routerLink]="['/Home']">
+        Home
+      </button>
     </div>
-
-    <button class="btn btn-outline-warning" type="submit">Criar receita</button>
-
-    <button class="btn btn-outline-success" [routerLink]="['/Home']">
-      Home
-    </button>
   </form>
 </body>

@@ -12,14 +12,10 @@
   padding-bottom: 5%;
 }
 
-.form-check-label {
-  padding-bottom: 20%;
-}
-
-.form-check-label-A {
-  padding-bottom: 20%;
-}
-
 .container {
   margin-top: 5%;
+}
+.btn {
+  width: 20%;
+  height: 15;
 }

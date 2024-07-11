@@ -20,4 +20,9 @@ export class ReceitasService {
   getReceitasById(id: number): Observable<Receitas[]> {
     return this.httpClient.get<Receitas[]>('/api/Receitas' + id);
   }
+  //criação da função onSubmit no serviço
+  onSubmit(ingredientArray: []) {
+    //mostrar no console a estrutura do objeto para saber como navegar dentro dele
+    console.log(JSON.stringify(ingredientArray));
+  }
 }

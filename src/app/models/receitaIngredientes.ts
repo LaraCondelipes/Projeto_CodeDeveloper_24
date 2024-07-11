@@ -2,9 +2,9 @@ import { Ingredientes } from './ingredientes';
 import { Receitas } from './receitas';
 
 export interface ReceitaIngredientes {
-  id: number;
+  id: number | null;
   receitas: Receitas;
   unidades: string;
-  quantidade: number;
+  quantidade: number | null;
   ingredientes: Ingredientes;
 }

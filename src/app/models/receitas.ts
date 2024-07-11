@@ -2,10 +2,10 @@ import { Categorias } from './categorias';
 import { ReceitaIngredientes } from './receitaIngredientes';
 
 export interface Receitas {
-  id: number;
+  id: number | null;
   titulo: string;
   duracao: number;
-  dificuldade: 'facil' | 'medio' | 'dificil';
+  dificuldade: string;
   categoria: Categorias;
   descricao: string;
   receitaIngredientes: ReceitaIngredientes[];

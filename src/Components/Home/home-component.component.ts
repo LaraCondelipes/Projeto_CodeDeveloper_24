@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Receitas } from '../../app/models/receitas';
 import { ReceitasComponent } from '../receitas/receitas.component';
 import { ReceitasService } from '../../app/services/receitas.service';
+import { DisplayReceitaComponent } from '../display-receita/display-receita.component';
 
 @Component({
   selector: 'app-home-component',

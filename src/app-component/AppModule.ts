@@ -15,6 +15,7 @@ import { ReceitasComponent } from '../Components/receitas/receitas.component';
 import { CriarReceitaComponent } from '../Components/CriarReceita/criar-receita.component';
 import { HomeComponentComponent } from '../Components/Home/home-component.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { DisplayReceitaComponent } from '../Components/display-receita/display-receita.component';
 
 @NgModule({
   declarations: [],
