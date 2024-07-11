@@ -7,7 +7,7 @@
   <form [formGroup]="submitForm" (ngSubmit)="onSubmit()">
     <div class="container text-center" formArrayName="ingredients">
       <legend class="form-label-1">Ingredientes:</legend>
-      <ng-container *ngFor="let item of ingredientes" [formGroupName]="item.id">
+      <div *ngFor="let item of ingredientes" [formGroupName]="item.id">
         <div class="row">
           <div class="col">
             <label for="ingredienteId-{{ item.id }}" class="form-label"
@@ -59,7 +59,7 @@
             Remove Ingredient
           </button>
         </div>
-      </ng-container>
+      </div>
       <div class="col">
         <div class="form-group">
           <label for="Textarea">Descrição da Receita:</label>

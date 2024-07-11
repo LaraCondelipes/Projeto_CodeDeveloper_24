@@ -61,13 +61,14 @@ export class CriarReceitaComponent implements OnInit {
   // criar um novo grupo de formulários de ingredientes
   createIngredient(): FormGroup {
     return this.fb.group({
-      ingredientId: [null, Validators.required],
-      quantidade: [null, Validators.required],
-      unidade: ['', Validators.required],
+      ingredientId: [null], //, Validators.required],
+      quantidade: [null],
+      unidade: [''],
     });
   }
   //adicionar um novo grupo de formulários de ingredientes ao FormArray de ingredientes
   addIngredient(): void {
+    console.log('adding ingredient');
     this.ingredients.push(this.createIngredient());
   }
 
@@ -109,10 +110,5 @@ export class CriarReceitaComponent implements OnInit {
     } else {
       console.log('Form is invalid');
     }
-  }
-
-  getFormValuesAsArray(): any[] {
-    const formValues = this.submitForm.value;
-    return Object.values(formValues); // Transform the form values into an array
   }
 }
