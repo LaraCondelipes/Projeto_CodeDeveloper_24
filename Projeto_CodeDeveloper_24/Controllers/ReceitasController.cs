@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto_CodeDeveloper_24.Models;
+using Projeto_CodeDeveloper_24.Repository;
 
 namespace Projeto_CodeDeveloper_24.Controllers
 {
@@ -13,25 +14,28 @@ namespace Projeto_CodeDeveloper_24.Controllers
     [ApiController]
     public class ReceitasController : ControllerBase
     {
-        private readonly ProjetoDbContext _context;
+        private readonly IRepository<Receitas> _receitasRepositorio;
+        private readonly IRepository<Ingredientes> _ingredientesRepositorio;
 
-        public ReceitasController(ProjetoDbContext context)
+        public ReceitasController(IRepository<Receitas> receitasRepositorio, IRepository<Ingredientes> ingredientesRepositorio)
         {
-            _context = context;
+            _receitasRepositorio = receitasRepositorio;
+            _ingredientesRepositorio = ingredientesRepositorio;
         }
 
         // GET: api/Receitas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Receitas>>> GetReceitas()
+        public IEnumerable<Receitas> GetReceitas()
         {
-            return await _context.Receitas.ToListAsync();
+            return _receitasRepositorio.All();
         }
 
         // GET: api/Receitas/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Receitas>> GetReceitas(int id)
         {
-            var receitas = await _context.Receitas.FindAsync(id);
+            //var receitas = await _context.Receitas.FindAsync(id);
+            var receitas = _receitasRepositorio.Get(id);
 
             if (receitas == null)
             {
@@ -50,12 +54,12 @@ namespace Projeto_CodeDeveloper_24.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(receitas).State = EntityState.Modified;
+            
+            //_context.Entry(receitas).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                _receitasRepositorio.Update(receitas);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -77,8 +81,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpPost]
         public async Task<ActionResult<Receitas>> PostReceitas(Receitas receitas)
         {
-            _context.Receitas.Add(receitas);
-            await _context.SaveChangesAsync();
+            _receitasRepositorio.Add(receitas);
 
             return CreatedAtAction("GetReceitas", new { id = receitas.Id }, receitas);
         }
@@ -87,21 +90,15 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReceitas(int id)
         {
-            var receitas = await _context.Receitas.FindAsync(id);
-            if (receitas == null)
-            {
-                return NotFound();
-            }
+            _receitasRepositorio.Delete(id);
 
-            _context.Receitas.Remove(receitas);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok();
         }
 
         private bool ReceitasExists(int id)
         {
-            return _context.Receitas.Any(e => e.Id == id);
+            
+            return _receitasRepositorio.All().Any(x => x.Id == id);
         }
     }
 }

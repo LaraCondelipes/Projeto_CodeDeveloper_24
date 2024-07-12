@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Projeto_CodeDeveloper_24.Migrations
 {
     [DbContext(typeof(ProjetoDbContext))]
-    partial class ProjetoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240711232912_adicionar os ids com null")]
+    partial class adicionarosidscomnull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
@@ -46,19 +49,25 @@ namespace Projeto_CodeDeveloper_24.Migrations
 
             modelBuilder.Entity("Projeto_CodeDeveloper_24.Models.ReceitaIngredientes", b =>
                 {
-                    b.Property<int?>("IngredientesId")
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ReceitasId")
+                    b.Property<int>("IngredientesId")
                         .HasColumnType("INTEGER");
 
                     b.Property<double?>("Quantidade")
                         .HasColumnType("REAL");
 
+                    b.Property<int>("ReceitasId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Unidades")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("IngredientesId", "ReceitasId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientesId");
 
                     b.HasIndex("ReceitasId");
 

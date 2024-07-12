@@ -1,0 +1,94 @@
+﻿@page "/CriarReceita"
+@inject HttpClient http
+@using Projeto_CodeDeveloper_24.Models
+@rendermode InteractiveServer
+
+<h3 >CriarReceita</h3>
+
+
+
+<EditForm Model="@modelo" OnSubmit="@CriarReceitas">
+    <label>Ingredientes</label>
+    <select class="form-select" @onchange="UpdateIngrediente" aria-label="Default select example">
+       
+        <option selected>Escolha</option>
+        @if (ingredientes is not null)
+        {
+            @foreach (var ingrediente in ingredientes)
+            {
+                <option  value="@ingrediente.Id" >@ingrediente.IngredienteName</option>
+            }
+        }
+    </select>
+    <label>Quantidade</label>
+    <input class ="input-group" type="text" @bind-value=receitaIngredientes.Quantidade/>
+    <label>Unidades</label>
+    <input class ="input-group" type="text" @bind-value=receitaIngredientes.Unidades />
+    
+    <button class=" button btn btn-outline-success" type="button" @onclick="AdicionarIngrediente">Adicionar</button>
+   <br/>
+    <label>Descrição:</label>
+    <input class="input-group"  type="text" @bind-value=modelo.Descricao />
+    <label>Título</label>
+    <input class="input-group" type="text" @bind-value=modelo.Titulo />
+    <label>Dificuldade:</label>
+    <input class="input-group" type="text" @bind-value=modelo.Dificuldade />
+    <div>
+        <label>Duração:</label>
+        <input class="input-group" type="text" @bind-value=modelo.Duracao />
+        <label>min.</label>
+
+    </div>
+    
+    <button class=" button btn btn-outline-success" type="submit">submeter</button>
+</EditForm>
+
+
+@code {
+    public Receitas? modelo { get; set; } 
+    public ReceitaIngredientes? receitaIngredientes { get; set; }
+    public List<Ingredientes>? ingredientes { get; set; }
+
+    //construtor
+    protected override void OnInitialized()
+    {
+        modelo = new Receitas();
+
+        //usamos o receitaIngrediente para fazer a ligação ente ingrediente-receita(quantidade e unidade)
+        receitaIngredientes = new ReceitaIngredientes();
+    }
+
+    //construtor que se deve usar para operações pesadas Ex: chamadas à Api
+    protected override async Task OnInitializedAsync()
+    {
+        ingredientes = await http.GetFromJsonAsync<List<Ingredientes>>("https://localhost:7179/api/Ingredientes");
+    }
+
+    private async void CriarReceitas()
+    {
+        if (modelo == null)
+        {
+            return;    
+        }
+
+        //chama a api para criar nova receita
+        var response = await http.PostAsJsonAsync<Receitas>("https://localhost:7179/api/Receitas", modelo);
+        modelo = new Receitas();
+        //variavel que vai guardar o id do ingrediente, unidade e quantidade
+        //receitaIngredientes = new ReceitaIngredientes();
+
+    }
+
+    //Quando se seleciona o ingrediente na drop guarda o id do ingrediente
+    private void UpdateIngrediente(ChangeEventArgs e)
+    {
+        receitaIngredientes.IngredientesId = Convert.ToInt32(e.Value);
+    }
+
+    private void AdicionarIngrediente()
+    {
+        Console.WriteLine(receitaIngredientes);
+        modelo.ReceitaIngredientes.Add(receitaIngredientes);
+        receitaIngredientes = new ReceitaIngredientes();
+    }
+}

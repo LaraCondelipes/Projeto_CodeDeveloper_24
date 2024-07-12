@@ -1,0 +1,86 @@
+﻿@page "/DetalheReceita/{Id}"
+@inject HttpClient http
+@using Projeto_CodeDeveloper_24.Models
+@rendermode InteractiveServer
+
+<h3>Detalhe</h3>
+
+@if (IsLoading)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <div class="col-sm-6 mb-3 mb-sm-0">
+        <div class="card ms-auto" style="width: 20rem; height:contain">
+            <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
+                 class="card-img-top"
+                 style="height:200px"
+                 alt="receita" />
+            <div class="card-body">
+                <p class="card-text">@receita.Titulo</p>
+                <p class="card-text">@receita.Descricao</p>
+                <p class="card-text">@receita.Dificuldade</p>
+                <p class="card-text">@receita.Duracao</p>
+
+                @foreach (var item in ings)
+                {
+                    <p class="card-text">@item.IngredienteName</p>
+                    <p class="card-text">@item.Quantidade</p>
+                    <p class="card-text">@item.Unidade</p>
+                }
+
+                <a href="#" class="btn btn-outline-danger">
+                    Editar
+                </a>
+
+                <NavLink class="btn btn-outline-warning" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private Receitas receita { get; set; }
+    private List<InternalIngredientes> ingredientes { get; set; }
+    private Ingredientes ing { get; set; }
+    private List<InternalIngredientes> ings { get; set; }
+
+    private bool IsLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ings = new List<InternalIngredientes>();
+        IsLoading = true;
+        receita = await http.GetFromJsonAsync<Receitas>($"https://localhost:7179/api/Receitas/{Id}");
+
+
+        foreach (var ingrediente in receita.ReceitaIngredientes)
+        {
+            ing = await http.GetFromJsonAsync<Ingredientes>($"https://localhost:7179/api/Ingredientes/{ingrediente.IngredientesId}");
+
+            var novoIngrediente = new InternalIngredientes()
+                {
+                    Unidade = ingrediente.Unidades,
+                    Quantidade = ingrediente.Quantidade,
+                    IngredienteName = ing.IngredienteName
+                };
+
+            ings.Add(novoIngrediente);
+        }
+
+        IsLoading = false;
+    }
+
+    public class InternalIngredientes
+    {
+        public string IngredienteName { get; set; }
+        public double? Quantidade { get; set; }
+        public string Unidade { get; set; }
+    }
+
+}

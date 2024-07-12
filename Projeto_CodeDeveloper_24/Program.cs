@@ -2,26 +2,29 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ProjetoDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("ProjetoDbContext") ?? throw new InvalidOperationException("Connection string 'ProjetoDbContext' not found.")));
+using Projeto_CodeDeveloper_24.Repository;
+using Projeto_CodeDeveloper_24.Models;
 
 
 
 //Add services to the container.
-
+var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ProjetoDbContext>(options =>
-{
-    options.UseSqlite("Data Source=(LocalDB)\\MSSQLLocalDB;Database=Receitas;Integrated Security=sspi;");
-    
-});
+    options.UseSqlite(builder.Configuration.GetConnectionString("ProjetoDbContext") ?? throw new InvalidOperationException("Connection string 'ProjetoDbContext' not found.")));
+
+//builder.Services.AddDbContext<ProjetoDbContext>(options =>
+//{
+//    options.UseSqlite("Data Source=(LocalDB)\\MSSQLLocalDB;Database=Receitas;Integrated Security=sspi;");
+
+//});
 
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IRepository<Receitas>, ReceitasRepository>();
+builder.Services.AddScoped<IRepository<Ingredientes>, IngredientesRepository>();
 
 var app = builder.Build();
 

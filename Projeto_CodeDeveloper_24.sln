@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projeto_CodeDeveloper_24", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_CodeDeveloper24.web", "Projeto_CodeDeveloper24.web\Projeto_CodeDeveloper24.web.csproj", "{7687B746-A042-43BF-9139-5EEB40AF83F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_CodeDeveloper24.models", "Projeto_CodeDeveloper24.models\Projeto_CodeDeveloper24.models.csproj", "{F20003B5-AE21-4C6D-95A2-066524B124B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7687B746-A042-43BF-9139-5EEB40AF83F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7687B746-A042-43BF-9139-5EEB40AF83F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7687B746-A042-43BF-9139-5EEB40AF83F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F20003B5-AE21-4C6D-95A2-066524B124B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F20003B5-AE21-4C6D-95A2-066524B124B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F20003B5-AE21-4C6D-95A2-066524B124B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F20003B5-AE21-4C6D-95A2-066524B124B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

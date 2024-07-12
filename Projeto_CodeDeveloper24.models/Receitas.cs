@@ -4,7 +4,7 @@ namespace Projeto_CodeDeveloper_24.Models
 {
     public class Receitas
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string? Titulo { get; set; }
         public int? Duracao { get; set; }
 
@@ -13,10 +13,10 @@ namespace Projeto_CodeDeveloper_24.Models
         
 
         // public List<Ingredientes>? Ingredientes { get; } = [];  //FK
-        public List<ReceitaIngredientes>? ReceitaIngredientes { get; set; } = [];
+        public virtual List<ReceitaIngredientes>? ReceitaIngredientes { get; set; } = [];
 
-        public int CategoriasId { get; set; }
+        public int? CategoriasId { get; set; }
 
-        [JsonIgnore] public Categorias? Categorias { get; set; }
+        [JsonIgnore] public virtual Categorias? Categorias { get; set; }
     }
 }

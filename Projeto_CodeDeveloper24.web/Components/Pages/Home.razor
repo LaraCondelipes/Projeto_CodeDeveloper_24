@@ -1,7 +1,62 @@
-﻿@page "/"
+﻿@inject NavigationManager navigationManager
+@inject HttpClient http
+@using Projeto_CodeDeveloper_24.Models
+@page "/"
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+
+@foreach (var receita in receitas)
+{
+<div class="col-sm-6 mb-3 mb-sm-0">
+          <div class="card ms-auto" style="width: 20rem; height: 22rem">
+            <img
+              src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
+              class="card-img-top"
+              style="height: 500px"
+              alt="receita"
+            />
+            <div class="card-body">
+              <p class="card-text">@receita.Titulo</p>
+              <p class="card-text">@receita.Descricao</p>
+                
+              <button  class="btn btn-outline-success" @onclick="()=>VisualizarReceita(receita.Id)">
+                Visualizar
+              </button>
+                <button type="button" class="btn btn-outline-success" @onclick="()=>DeleteItem(receita)">Remover</button>
+            </div>
+          </div>
+        </div>    
+        
+       
+}
+
+@code{
+    public  List<Receitas>? receitas = new List<Receitas>();
+
+    //o código que está aqui dentro vai buscar data à database sempre que a pagina for carregada
+    protected override async Task OnInitializedAsync()
+    {
+        receitas = await http.GetFromJsonAsync<List<Receitas>>("https://localhost:7179/api/Receitas");
+    }
+
+
+
+    //botão apagar receitas
+    private async void DeleteItem(Receitas receita)
+    {
+        var response = await http.DeleteAsync($"https://localhost:7179/api/Receitas/{receita.Id}");
+        navigationManager.Refresh(true);
+    }
+
+
+    private void VisualizarReceita(int? receitaId)
+    {
+        navigationManager.NavigateTo($"/DetalheReceita/{receitaId}");    
+    }
+
+}
+
+

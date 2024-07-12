@@ -11,20 +11,13 @@ namespace Projeto_CodeDeveloper_24.Repository
             this.context = context;
         }
 
-        public IEnumerable<Receitas> GetAll() 
-        {
-            return context
-                .Receitas
-                .Include(x => x.ReceitaIngredientes)
-                .ToList();
-        }
-
         public Receitas? Get(int id) 
         {
             return context
                 .Receitas
                 .Include(x => x.ReceitaIngredientes)
-                .FirstOrDefault(x => x.Id == id);
+                .Include("ReceitaIngredientes.Ingredientes")
+              .FirstOrDefault(x => x.Id == id);
         }
 
         public Receitas? Add(Receitas value)
@@ -45,15 +38,26 @@ namespace Projeto_CodeDeveloper_24.Repository
             var Receitas = Get(id);
             if (Receitas != null) 
             {
-                context.Receitas.Remove(Receitas);
-                context.SaveChanges();  
+                try
+                {
+                    context.Receitas.Remove(Receitas);
+                    context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    throw;
+                }
+                
             }
 
         }
 
         public IEnumerable<Receitas> All()
         {
-            throw new NotImplementedException();
+            return context
+                .Receitas
+                .Include(x => x.ReceitaIngredientes);
         }
     }
 }

@@ -1,0 +1,24 @@
+﻿body {
+ 
+}
+
+.input-group {
+margin-bottom: 1rem;
+width: 12rem;
+}
+
+.button {
+    margin: 1rem;
+    margin-left:6rem;
+}
+
+.form-select {
+width: 12rem;
+margin-bottom: 2rem;
+}
+
+h3 {
+margin-top: 2rem;
+margin-bottom:2rem;
+
+}

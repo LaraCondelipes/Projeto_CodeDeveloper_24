@@ -44,9 +44,9 @@ namespace Projeto_CodeDeveloper_24.Controllers
         // PUT: api/ReceitaIngredientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReceitaIngredientes(int id, ReceitaIngredientes receitaIngredientes)
+        public async Task<IActionResult> PutReceitaIngredientes(int receitaId,int ingredienteId, ReceitaIngredientes receitaIngredientes)
         {
-            if (id != receitaIngredientes.Id)
+            if (receitaId != receitaIngredientes.ReceitasId || ingredienteId != receitaIngredientes.IngredientesId)
             {
                 return BadRequest();
             }
@@ -59,7 +59,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReceitaIngredientesExists(id))
+                if (!ReceitaIngredientesExists(receitaId,ingredienteId))
                 {
                     return NotFound();
                 }
@@ -80,7 +80,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
             _context.ReceitaIngredientes.Add(receitaIngredientes);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReceitaIngredientes", new { id = receitaIngredientes.Id }, receitaIngredientes);
+            return CreatedAtAction("GetReceitaIngredientes", new { id = receitaIngredientes.ReceitasId }, receitaIngredientes);
         }
 
         // DELETE: api/ReceitaIngredientes/5
@@ -99,9 +99,9 @@ namespace Projeto_CodeDeveloper_24.Controllers
             return NoContent();
         }
 
-        private bool ReceitaIngredientesExists(int id)
+        private bool ReceitaIngredientesExists(int receitaId, int ingredienteId)
         {
-            return _context.ReceitaIngredientes.Any(e => e.Id == id);
+            return _context.ReceitaIngredientes.Any(e => e.ReceitasId == receitaId && e.IngredientesId == ingredienteId);
         }
     }
 }

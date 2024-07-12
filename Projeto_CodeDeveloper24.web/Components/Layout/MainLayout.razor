@@ -1,14 +1,38 @@
-﻿@inherits LayoutComponentBase
+﻿@inject NavigationManager navigationManager
+@inherits LayoutComponentBase
+
+
+<base href="~/"
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+        <nav class="navbar-toggler bg-body-tertiary">
+            <div class="container-fluid" style="height: 60px">
+                <a class="navbar-brand" href="#">
+                    <img src="data:image/jpeg;base64,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"
+                         alt=""
+                         width="30"
+                         height="24"
+                         class="d-inline-block align-text-top" />Livro de Receitas
+                </a>
+              
+                <NavLink class="button btn btn-outline-warning" href="CriarReceita" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Criar Receita
+                </NavLink>
+
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2"
+                           type="search"
+                           placeholder="Search"
+                           aria-label="Search" />
+                    <button class="btn btn-outline-success" type="submit">
+                        Procurar
+                    </button>
+                </form>
+            </div>
+        </nav>
 
         <article class="content px-4">
             @Body
@@ -21,3 +45,4 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+

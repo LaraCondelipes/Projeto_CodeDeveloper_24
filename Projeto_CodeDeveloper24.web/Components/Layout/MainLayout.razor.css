@@ -94,3 +94,15 @@ main {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+    .button{
+
+    }
+
+.form-control {
+    width:13rem;
+    
+}
+.navbar-toggler {
+    margin-bottom: 7rem;
+}

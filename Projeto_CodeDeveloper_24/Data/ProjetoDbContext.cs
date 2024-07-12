@@ -19,32 +19,37 @@ public DbSet<ReceitaIngredientes> ReceitaIngredientes { get; set; } = default!;
 public DbSet<Receitas> Receitas { get; set; } = default!;
     public DbSet<Categorias> Categorias { get; set; } = default!;
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ReceitaIngredientes>()
+            .HasKey(x => new { x.IngredientesId, x.ReceitasId });
+    }
 
     //fazer a ralação das tabelas
-//    protected override void OnModelCreating(ModelBuilder modelBuilder)
-//    {
-//        modelBuilder.Entity<Ingredientes>()
-//   .HasMany(e => e.Receitas)
-//   .WithMany(e => e.Ingredientes)
-//   .UsingEntity<ReceitaIngredientes>(
-//       l => l.HasOne<Receitas>().WithMany().HasForeignKey(e => e.ReceitasId),
-//       r => r.HasOne<Ingredientes>().WithMany().HasForeignKey(e => e.IngredientesId));
+    //    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //    {
+    //        modelBuilder.Entity<Ingredientes>()
+    //   .HasMany(e => e.Receitas)
+    //   .WithMany(e => e.Ingredientes)
+    //   .UsingEntity<ReceitaIngredientes>(
+    //       l => l.HasOne<Receitas>().WithMany().HasForeignKey(e => e.ReceitasId),
+    //       r => r.HasOne<Ingredientes>().WithMany().HasForeignKey(e => e.IngredientesId));
 
 
-//    modelBuilder.Entity<Receitas>()
-//   .HasMany(e => e.Ingredientes)
-//   .WithMany(e => e.Receitas)
-//   .UsingEntity<ReceitaIngredientes>(
-//       l => l.HasOne<Ingredientes>().WithMany().HasForeignKey(e => e.IngredientesId),
-//       r => r.HasOne<Receitas>().WithMany().HasForeignKey(e => e.ReceitasId));
+    //    modelBuilder.Entity<Receitas>()
+    //   .HasMany(e => e.Ingredientes)
+    //   .WithMany(e => e.Receitas)
+    //   .UsingEntity<ReceitaIngredientes>(
+    //       l => l.HasOne<Ingredientes>().WithMany().HasForeignKey(e => e.IngredientesId),
+    //       r => r.HasOne<Receitas>().WithMany().HasForeignKey(e => e.ReceitasId));
 
-//}
-   
-//    // modelBuilder.Entity<Categorias>()
-//    //{
-       
-//    //        .HasOne(e => e.Categorias).WithMany(e. => e)
-//    //        .WithMany(c => c.Receitas)
-//    //        .HasForeignKey(r => r.CategoriasId);
-//    //}
+    //}
+
+    //    // modelBuilder.Entity<Categorias>()
+    //    //{
+
+    //    //        .HasOne(e => e.Categorias).WithMany(e. => e)
+    //    //        .WithMany(c => c.Receitas)
+    //    //        .HasForeignKey(r => r.CategoriasId);
+    //    //}
 }
