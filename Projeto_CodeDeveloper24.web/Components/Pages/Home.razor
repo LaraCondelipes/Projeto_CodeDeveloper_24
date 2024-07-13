@@ -6,40 +6,60 @@
 
 <PageTitle>Home</PageTitle>
 
+<form class="d-flex" role="search" @onsubmit="Procurar">
+    <input class="form-control me-2"
+           type="search"
+           placeholder="Search"
+           aria-label="Search"
+           @bind-value="pesquisa"/>
+    <button class="btn btn-outline-success" type="submit">
+        Procurar
+    </button>
+</form>
 
 
-@foreach (var receita in receitas)
+@foreach (var receita in receitasPesquisa)
 {
-<div class="col-sm-6 mb-3 mb-sm-0">
-          <div class="card ms-auto" style="width: 20rem; height: 22rem">
-            <img
-              src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
-              class="card-img-top"
-              style="height: 500px"
-              alt="receita"
-            />
-            <div class="card-body">
-              <p class="card-text">@receita.Titulo</p>
-              <p class="card-text">@receita.Descricao</p>
-                
-              <button  class="btn btn-outline-success" @onclick="()=>VisualizarReceita(receita.Id)">
-                Visualizar
-              </button>
-                <button type="button" class="btn btn-outline-success" @onclick="()=>DeleteItem(receita)">Remover</button>
+
+      <div class="row">
+        <div class="col">
+            <div class="card" style="width: 20rem; height: 22rem">
+
+                <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
+                     class="card-img-top"
+                     style="height: 200px"
+                     alt="receita" />
+                <div class="card-body">
+                    <p class="card-text">@receita.Titulo</p>
+                    <p class="card-text">@receita.Descricao</p>
+
+                    <button class="btn btn-outline-success" @onclick="()=>VisualizarReceita(receita.Id)">
+                        Visualizar
+                    </button>
+                    <button type="button" class="btn btn-outline-success" @onclick="()=>DeleteItem(receita)">Remover</button>
+                </div>
             </div>
-          </div>
-        </div>    
+
+    </div>
+    
+  </div>
+
+    
+         
+          
         
        
 }
 
 @code{
     public  List<Receitas>? receitas = new List<Receitas>();
-
+    public List<Receitas>? receitasPesquisa = new List<Receitas>();
+    private string pesquisa { get; set; }
     //o código que está aqui dentro vai buscar data à database sempre que a pagina for carregada
     protected override async Task OnInitializedAsync()
     {
         receitas = await http.GetFromJsonAsync<List<Receitas>>("https://localhost:7179/api/Receitas");
+        receitasPesquisa = receitas;
     }
 
 
@@ -55,6 +75,18 @@
     private void VisualizarReceita(int? receitaId)
     {
         navigationManager.NavigateTo($"/DetalheReceita/{receitaId}");    
+    }
+    private void Procurar()
+    {
+        if (pesquisa == "")
+        {
+            receitasPesquisa = receitas;
+        }
+        else
+        {
+            receitasPesquisa = receitas.Where(x => x.Titulo.Contains(pesquisa) || x.Dificuldade.Contains(pesquisa)).ToList();
+        }
+       
     }
 
 }

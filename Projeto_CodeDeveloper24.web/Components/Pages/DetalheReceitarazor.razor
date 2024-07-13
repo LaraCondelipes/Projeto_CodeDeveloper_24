@@ -2,8 +2,9 @@
 @inject HttpClient http
 @using Projeto_CodeDeveloper_24.Models
 @rendermode InteractiveServer
+@inject NavigationManager navigationManager
 
-<h3>Detalhe</h3>
+<h3 >Detalhe</h3>
 
 @if (IsLoading)
 {
@@ -11,16 +12,20 @@
 }
 else
 {
-    <div class="col-sm-6 mb-3 mb-sm-0">
-        <div class="card ms-auto" style="width: 20rem; height:contain">
+   
+        <div class="card" style="width: 20rem; height:contain">
             <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
                  class="card-img-top"
                  style="height:200px"
                  alt="receita" />
             <div class="card-body">
                 <p class="card-text">@receita.Titulo</p>
+                <p class="card-text">@categoria.Name</p>
+                <label>Descrição:</label>
                 <p class="card-text">@receita.Descricao</p>
+                <label>Dificuldade:</label>
                 <p class="card-text">@receita.Dificuldade</p>
+                <label>Duração:</label>
                 <p class="card-text">@receita.Duracao</p>
 
                 @foreach (var item in ings)
@@ -30,16 +35,16 @@ else
                     <p class="card-text">@item.Unidade</p>
                 }
 
-                <a href="#" class="btn btn-outline-danger">
+                <button type="button" href="/EditarReceita/{Id}" class="btn btn-outline-danger" @onclick="IrParaEditar">
                     Editar
-                </a>
+                </button>
 
                 <NavLink class="btn btn-outline-warning" href="" Match="NavLinkMatch.All">
                     <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
                 </NavLink>
             </div>
         </div>
-    </div>
+    
 }
 
 @code {
@@ -49,6 +54,7 @@ else
     private List<InternalIngredientes> ingredientes { get; set; }
     private Ingredientes ing { get; set; }
     private List<InternalIngredientes> ings { get; set; }
+    private Categorias categoria { get; set; }
 
     private bool IsLoading = true;
 
@@ -57,6 +63,7 @@ else
         ings = new List<InternalIngredientes>();
         IsLoading = true;
         receita = await http.GetFromJsonAsync<Receitas>($"https://localhost:7179/api/Receitas/{Id}");
+        categoria = await http.GetFromJsonAsync<Categorias>($"https://localhost:7179/api/Categorias/{receita.CategoriasId}");
 
 
         foreach (var ingrediente in receita.ReceitaIngredientes)
@@ -82,5 +89,11 @@ else
         public double? Quantidade { get; set; }
         public string Unidade { get; set; }
     }
+
+    private void IrParaEditar()
+    {
+        navigationManager.NavigateTo($"/EditarReceita/{Id}");
+    }
+
 
 }

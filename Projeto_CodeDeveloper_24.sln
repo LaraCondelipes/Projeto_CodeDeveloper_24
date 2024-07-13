@@ -5,9 +5,9 @@ VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projeto_CodeDeveloper_24", "Projeto_CodeDeveloper_24\Projeto_CodeDeveloper_24.csproj", "{3CEBC110-FC59-43E4-8EAA-B79CA582671B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_CodeDeveloper24.web", "Projeto_CodeDeveloper24.web\Projeto_CodeDeveloper24.web.csproj", "{7687B746-A042-43BF-9139-5EEB40AF83F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projeto_CodeDeveloper24.web", "Projeto_CodeDeveloper24.web\Projeto_CodeDeveloper24.web.csproj", "{7687B746-A042-43BF-9139-5EEB40AF83F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_CodeDeveloper24.models", "Projeto_CodeDeveloper24.models\Projeto_CodeDeveloper24.models.csproj", "{F20003B5-AE21-4C6D-95A2-066524B124B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projeto_CodeDeveloper24.models", "Projeto_CodeDeveloper24.models\Projeto_CodeDeveloper24.models.csproj", "{F20003B5-AE21-4C6D-95A2-066524B124B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -29,7 +29,12 @@ namespace Projeto_CodeDeveloper_24.Repository
         }
         public void Update(Receitas value) 
         {
+            //var existingEntity = context.Receitas.Where(x => x.Id == value.Id).Include(x => x.ReceitaIngredientes).FirstOrDefault();
+
+            //existingEntity.ReceitaIngredientes = value.ReceitaIngredientes;
+
             context.Entry(value).State = EntityState.Modified;
+            //context.Entry(value.ReceitaIngredientes).State = EntityState.Modified;
             context.SaveChanges();
         }
 

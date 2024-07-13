@@ -8,7 +8,20 @@
 
 
 <EditForm Model="@modelo" OnSubmit="@CriarReceitas">
-    <label>Ingredientes</label>
+    <label>Categoria:</label>
+    <select class="form-select" @onchange="UpdateCategoria" aria-label="Default select example">
+
+        <option selected>Escolha</option>
+        @if (categorias is not null)
+        {
+            @foreach (var categoria in categorias)
+            {
+                <option value="@categoria.Id">@categoria.Name</option>
+            }
+        }
+    </select>
+
+    <label>Ingredientes:</label>
     <select class="form-select" @onchange="UpdateIngrediente" aria-label="Default select example">
        
         <option selected>Escolha</option>
@@ -20,16 +33,19 @@
             }
         }
     </select>
-    <label>Quantidade</label>
+    <label>Quantidade:</label>
     <input class ="input-group" type="text" @bind-value=receitaIngredientes.Quantidade/>
-    <label>Unidades</label>
+    <label>Unidades:</label>
     <input class ="input-group" type="text" @bind-value=receitaIngredientes.Unidades />
-    
+    @if (ingredienteExiste)
+    {
+        <p>Ingrediente já existe!</p>
+    }
     <button class=" button btn btn-outline-success" type="button" @onclick="AdicionarIngrediente">Adicionar</button>
    <br/>
     <label>Descrição:</label>
     <input class="input-group"  type="text" @bind-value=modelo.Descricao />
-    <label>Título</label>
+    <label>Título:</label>
     <input class="input-group" type="text" @bind-value=modelo.Titulo />
     <label>Dificuldade:</label>
     <input class="input-group" type="text" @bind-value=modelo.Dificuldade />
@@ -39,21 +55,29 @@
         <label>min.</label>
 
     </div>
-    
+    @if (aSubmeter)
+    {
+        <p>Receita submetida</p>
+    }
     <button class=" button btn btn-outline-success" type="submit">submeter</button>
+   
 </EditForm>
+
+
 
 
 @code {
     public Receitas? modelo { get; set; } 
     public ReceitaIngredientes? receitaIngredientes { get; set; }
     public List<Ingredientes>? ingredientes { get; set; }
+    public List<Categorias>? categorias { get; set; }
+    private bool aSubmeter = false;
+    private bool ingredienteExiste = false;
 
     //construtor
     protected override void OnInitialized()
     {
         modelo = new Receitas();
-
         //usamos o receitaIngrediente para fazer a ligação ente ingrediente-receita(quantidade e unidade)
         receitaIngredientes = new ReceitaIngredientes();
     }
@@ -62,21 +86,23 @@
     protected override async Task OnInitializedAsync()
     {
         ingredientes = await http.GetFromJsonAsync<List<Ingredientes>>("https://localhost:7179/api/Ingredientes");
+        categorias = await http.GetFromJsonAsync<List<Categorias>>("https://localhost:7179/api/Categorias");
     }
 
     private async void CriarReceitas()
     {
+        aSubmeter = true;
+
         if (modelo == null)
         {
+            aSubmeter = false;
             return;    
         }
 
         //chama a api para criar nova receita
         var response = await http.PostAsJsonAsync<Receitas>("https://localhost:7179/api/Receitas", modelo);
         modelo = new Receitas();
-        //variavel que vai guardar o id do ingrediente, unidade e quantidade
-        //receitaIngredientes = new ReceitaIngredientes();
-
+        aSubmeter = false;
     }
 
     //Quando se seleciona o ingrediente na drop guarda o id do ingrediente
@@ -88,7 +114,23 @@
     private void AdicionarIngrediente()
     {
         Console.WriteLine(receitaIngredientes);
-        modelo.ReceitaIngredientes.Add(receitaIngredientes);
-        receitaIngredientes = new ReceitaIngredientes();
+        //faz que não seja permitido inserir o mesmo ingrediente
+        if (!modelo.ReceitaIngredientes.Any(x => x.IngredientesId == receitaIngredientes.IngredientesId))
+        {
+            modelo.ReceitaIngredientes.Add(receitaIngredientes);
+            receitaIngredientes = new ReceitaIngredientes();
+            ingredienteExiste = false;
+        }
+        else
+        {
+            ingredienteExiste = true;    
+        }
+
+    }
+
+    //Quando se seleciona uma categoria na drop guarda o id da categoria
+    private void UpdateCategoria(ChangeEventArgs e)
+    {
+        modelo.CategoriasId= Convert.ToInt32(e.Value);
     }
 }

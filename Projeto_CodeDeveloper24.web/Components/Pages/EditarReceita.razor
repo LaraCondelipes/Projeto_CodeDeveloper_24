@@ -1,0 +1,174 @@
+﻿@page "/EditarReceita/{Id}"
+@inject HttpClient http
+@using Projeto_CodeDeveloper_24.Models
+@rendermode InteractiveServer
+@inject NavigationManager navigationManager
+
+<h3>Editar Receita</h3>
+
+@if (IsLoading)
+{
+<div class="spinner"></div>
+}
+else
+{
+<EditForm Model="@receita" OnSubmit="@EditarReceitas">
+        <label>Categoria:</label>
+        <select class="form-select" @onchange="UpdateCategoria" aria-label="Default select example">
+
+            <option selected>Escolha</option>
+            @if (categorias is not null)
+            {
+                @foreach (var categoria in categorias)
+                {
+                    <option value="@categoria.Id">@categoria.Name</option>
+                }
+            }
+        </select>
+
+        <label>Ingredientes:</label>
+
+        @foreach (var item in ingredientesDaReceitaExistente)
+    {
+            <input class="input-group" readonly type="text" @bind-value=item.IngredienteName />
+            <label>Quantidade:</label>
+            <input class="input-group" type="text" @bind-value=item.Quantidade />
+            <label>Unidades:</label>
+            <input class="input-group" type="text" @bind-value=item.Unidade />
+    }
+        
+        <br />
+        <label>Descrição:</label>
+        <input class="input-group" type="text" @bind-value=receita.Descricao />
+        <label>Título:</label>
+        <input class="input-group" type="text" @bind-value=receita.Titulo />
+        <label>Dificuldade:</label>
+        <input class="input-group" type="text" @bind-value=receita.Dificuldade />
+        <div>
+            <label>Duração:</label>
+            <input class="input-group" type="text" @bind-value=receita.Duracao />
+            <label>min.</label>
+
+        </div>
+        <button type="submit" class=" button btn btn-outline-danger">
+            Submeter
+        </button>
+        @if (aSubmeter)
+        {
+            <p>Receita submetida</p>
+        }
+
+</EditForm>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private Receitas receita { get; set; }
+    private Ingredientes ing { get; set; }
+    private List<InternalIngredientes> ingredientesDaReceitaExistente { get; set; }
+    private Categorias categoria { get; set; }
+    private bool aSubmeter = false;
+    private string categoriaActual { get; set; }
+
+    public ReceitaIngredientes? receitaIngredientes { get; set; }
+    public List<Ingredientes>? ingredientes { get; set; }
+    public List<Categorias>? categorias { get; set; }
+
+    private bool IsLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ingredientesDaReceitaExistente = new List<InternalIngredientes>();
+        IsLoading = true;
+        receita = await http.GetFromJsonAsync<Receitas>($"https://localhost:7179/api/Receitas/{Id}");
+       // categoria = await http.GetFromJsonAsync<Categorias>($"https://localhost:7179/api/Categorias/{receita.CategoriasId}"); 
+        ingredientes = await http.GetFromJsonAsync<List<Ingredientes>>("https://localhost:7179/api/Ingredientes");
+        categorias = await http.GetFromJsonAsync<List<Categorias>>("https://localhost:7179/api/Categorias");
+
+        //categoriaActual = categoria.Name;
+        //modelo = receita;
+
+        foreach (var ingrediente in receita.ReceitaIngredientes)
+        {
+            ing = await http.GetFromJsonAsync<Ingredientes>($"https://localhost:7179/api/Ingredientes/{ingrediente.IngredientesId}");
+
+            var novoIngrediente = new InternalIngredientes()
+                {
+                    Unidade = ingrediente.Unidades,
+                    Quantidade = ingrediente.Quantidade,
+                    IngredienteName = ing.IngredienteName,
+                    ingredienteId = ing?.Id,
+                    apagado = false
+                };
+
+            ingredientesDaReceitaExistente.Add(novoIngrediente);
+        }
+
+        IsLoading = false;
+    }
+
+
+    public class InternalIngredientes
+    {
+        public int? ingredienteId { get;set;}
+        public string IngredienteName { get; set; }
+        public double? Quantidade { get; set; }
+        public string Unidade { get; set; }
+        public bool apagado { get; set; }
+    }
+
+    private async Task EditarReceitas()
+    {
+        aSubmeter = true;
+
+        if (receita == null)
+        {
+            aSubmeter = false;
+            return;
+        }
+
+        foreach (var item in ingredientesDaReceitaExistente)
+        {
+            var ingredienteExistente = receita.ReceitaIngredientes.FirstOrDefault(x => x.IngredientesId == item.ingredienteId);
+            ingredienteExistente.Quantidade = item.Quantidade;
+            ingredienteExistente.Unidades = item.Unidade;
+        }
+
+        try
+        {
+            var response = await http.PutAsJsonAsync<Receitas>($"https://localhost:7179/api/Receitas/{receita.Id}", receita);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+        //chama a api para criar nova receita
+        
+        aSubmeter = false;
+    }
+
+    //Quando se seleciona o ingrediente na drop guarda o id do ingrediente
+    private void UpdateIngrediente(ChangeEventArgs e)
+    {
+        receitaIngredientes.IngredientesId = Convert.ToInt32(e.Value);
+    }
+
+    private void AdicionarIngrediente()
+    {
+        Console.WriteLine(receitaIngredientes);
+        receita.ReceitaIngredientes.Add(receitaIngredientes);
+        receitaIngredientes = new ReceitaIngredientes();
+    }
+
+    //Quando se seleciona uma categoria na drop guarda o id da categoria
+    private void UpdateCategoria(ChangeEventArgs e)
+    {
+        receita.CategoriasId = Convert.ToInt32(e.Value);
+    }
+
+  
+
+}
