@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto_CodeDeveloper_24.Models;
+using Projeto_CodeDeveloper_24.Repository;
 
 namespace Projeto_CodeDeveloper_24.Controllers
 {
@@ -13,63 +14,56 @@ namespace Projeto_CodeDeveloper_24.Controllers
     [ApiController]
     public class CategoriasController : ControllerBase
     {
-        private readonly ProjetoDbContext _context;
+        private readonly IRepository<Categorias> _categoriasRepositorio;
 
-        public CategoriasController(ProjetoDbContext context)
+
+        public CategoriasController(IRepository<Categorias> categoriasRepositorio)
         {
-            _context = context;
+            _categoriasRepositorio = categoriasRepositorio;
         }
 
         // GET: api/Categorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categorias>>> GetCategorias()
+        public IEnumerable<Categorias> GetCategorias()
         {
-            return await _context.Categorias.ToListAsync();
+            return _categoriasRepositorio.All();
         }
 
         // GET: api/Categorias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categorias>> GetCategorias(int id)
+        public  Categorias GetCategorias(int id)
         {
-            var categorias = await _context.Categorias.FindAsync(id);
 
-            if (categorias == null)
-            {
-                return NotFound();
-            }
+            var categorias = _categoriasRepositorio.Get(id);
 
+          
             return categorias;
         }
 
         // PUT: api/Categorias/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategorias(int id, Categorias categorias)
+        public void PutCategorias(int id, Categorias categorias)
         {
             if (id != categorias.Id)
             {
-                return BadRequest();
+                return;
             }
-
-            _context.Entry(categorias).State = EntityState.Modified;
-
+                       
             try
             {
-                await _context.SaveChangesAsync();
+               
+                _categoriasRepositorio.Update(categorias);
+
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoriasExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
+              
                     throw;
-                }
+                
             }
 
-            return NoContent();
+            return;
         }
 
         // POST: api/Categorias
@@ -77,9 +71,9 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpPost]
         public async Task<ActionResult<Categorias>> PostCategorias(Categorias categorias)
         {
-            _context.Categorias.Add(categorias);
-            await _context.SaveChangesAsync();
 
+            _categoriasRepositorio.Add(categorias);
+            
             return CreatedAtAction("GetCategorias", new { id = categorias.Id }, categorias);
         }
 
@@ -87,21 +81,14 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategorias(int id)
         {
-            var categorias = await _context.Categorias.FindAsync(id);
-            if (categorias == null)
-            {
-                return NotFound();
-            }
-
-            _context.Categorias.Remove(categorias);
-            await _context.SaveChangesAsync();
+           _categoriasRepositorio.Delete(id);
 
             return NoContent();
         }
 
         private bool CategoriasExists(int id)
         {
-            return _context.Categorias.Any(e => e.Id == id);
+            return _categoriasRepositorio.All().Any(e => e.Id == id);
         }
     }
 }

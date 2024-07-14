@@ -12,39 +12,65 @@
 }
 else
 {
-   
-        <div class="card" style="width: 20rem; height:contain">
-            <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
-                 class="card-img-top"
-                 style="height:200px"
-                 alt="receita" />
+    <div class="card">
+    <div class="row">
+        <div class="col">
+                <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
+                     class="card-img-top"
+                     style="height:200px"
+                     alt="receita" />
+        </div>
+            <div class="col">
+                <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
+                     class="card-img-top"
+                     style="height:200px"
+                     alt="receita" />
+            </div>
+        
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+           
             <div class="card-body">
-                <p class="card-text">@receita.Titulo</p>
                 <p class="card-text">@categoria.Name</p>
-                <label>Descrição:</label>
-                <p class="card-text">@receita.Descricao</p>
-                <label>Dificuldade:</label>
-                <p class="card-text">@receita.Dificuldade</p>
-                <label>Duração:</label>
-                <p class="card-text">@receita.Duracao</p>
-
+                <p class="card-text">@receita.Titulo</p>
+                <label>Ingredientes:</label>
                 @foreach (var item in ings)
                 {
-                    <p class="card-text">@item.IngredienteName</p>
-                    <p class="card-text">@item.Quantidade</p>
-                    <p class="card-text">@item.Unidade</p>
+                    <p class="card-text">@item.IngredienteName  <label class="card-text">@item.Quantidade</label> <label class="card-text">@item.Unidade</label></p>
+
+
                 }
-
-                <button type="button" href="/EditarReceita/{Id}" class="btn btn-outline-danger" @onclick="IrParaEditar">
-                    Editar
-                </button>
-
-                <NavLink class="btn btn-outline-warning" href="" Match="NavLinkMatch.All">
-                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-                </NavLink>
             </div>
         </div>
-    
+        <div class="col-md-6">
+            <label>Descrição:</label>
+            <p class="card-text">@((MarkupString)receita.Descricao)</p>
+            <div class="row">
+                <div class="col-md-4 dificuldade">
+                        <label>Dificuldade:</label>
+                        <p class="card-text">@receita.Dificuldade</p>
+                </div>
+                    <div class="col-md-4 duracao">
+                        <label>Duração:</label>
+                        <p class="card-text">@receita.Duracao <label>m</label></p>
+
+                    </div>
+            </div>
+
+
+                <button type="button" class="button btn btn-outline-danger" @onclick="()=>IrPara(destination)">
+                    
+                Editar
+            </button>
+            <!-- o onClick tem uma string vazia porque vai para o Home  -->
+                <button type="button" class="button btn btn-outline-warning" @onclick="()=>IrPara(string.Empty)">
+                Home
+            </button>
+
+        </div>
+    </div>
+    </div>
 }
 
 @code {
@@ -58,6 +84,8 @@ else
 
     private bool IsLoading = true;
 
+    public string destination { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         ings = new List<InternalIngredientes>();
@@ -65,6 +93,7 @@ else
         receita = await http.GetFromJsonAsync<Receitas>($"https://localhost:7179/api/Receitas/{Id}");
         categoria = await http.GetFromJsonAsync<Categorias>($"https://localhost:7179/api/Categorias/{receita.CategoriasId}");
 
+        destination = $"EditarReceita/{Id}";
 
         foreach (var ingrediente in receita.ReceitaIngredientes)
         {
@@ -90,9 +119,9 @@ else
         public string Unidade { get; set; }
     }
 
-    private void IrParaEditar()
+    private void IrPara(string destino)
     {
-        navigationManager.NavigateTo($"/EditarReceita/{Id}");
+        navigationManager.NavigateTo(destino);
     }
 
 

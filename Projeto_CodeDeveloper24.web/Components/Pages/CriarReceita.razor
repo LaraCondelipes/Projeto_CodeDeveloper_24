@@ -2,6 +2,7 @@
 @inject HttpClient http
 @using Projeto_CodeDeveloper_24.Models
 @rendermode InteractiveServer
+@inject NavigationManager navigationManager
 
 <h3 >CriarReceita</h3>
 
@@ -35,6 +36,7 @@
     </select>
     <label>Quantidade:</label>
     <input class ="input-group" type="text" @bind-value=receitaIngredientes.Quantidade/>
+    <ValidationMessage For="()=>receitaIngredientes.Quantidade"></ValidationMessage>
     <label>Unidades:</label>
     <input class ="input-group" type="text" @bind-value=receitaIngredientes.Unidades />
     @if (ingredienteExiste)
@@ -45,6 +47,7 @@
    <br/>
     <label>Descrição:</label>
     <input class="input-group"  type="text" @bind-value=modelo.Descricao />
+    <ValidationMessage For="()=>modelo.Descricao"></ValidationMessage>
     <label>Título:</label>
     <input class="input-group" type="text" @bind-value=modelo.Titulo />
     <label>Dificuldade:</label>
@@ -60,6 +63,9 @@
         <p>Receita submetida</p>
     }
     <button class=" button btn btn-outline-success" type="submit">submeter</button>
+    <button type="submit" class=" button btn btn-outline-warning" @onclick="()=>IrParaHome()">
+        Home
+    </button>
    
 </EditForm>
 
@@ -132,5 +138,10 @@
     private void UpdateCategoria(ChangeEventArgs e)
     {
         modelo.CategoriasId= Convert.ToInt32(e.Value);
+    }
+
+    private void IrParaHome()
+    {
+        navigationManager.NavigateTo($"/");
     }
 }

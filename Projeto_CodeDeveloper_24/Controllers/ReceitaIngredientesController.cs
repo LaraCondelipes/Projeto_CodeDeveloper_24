@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto_CodeDeveloper_24.Models;
+using Projeto_CodeDeveloper_24.Repository;
 
 namespace Projeto_CodeDeveloper_24.Controllers
 {
@@ -13,63 +14,56 @@ namespace Projeto_CodeDeveloper_24.Controllers
     [ApiController]
     public class ReceitaIngredientesController : ControllerBase
     {
-        private readonly ProjetoDbContext _context;
+        private readonly IRepository<ReceitaIngredientes> _receitaIngredientesRepository;
 
-        public ReceitaIngredientesController(ProjetoDbContext context)
-        {
-            _context = context;
+        public ReceitaIngredientesController(IRepository<ReceitaIngredientes> receitaIngredientesRepository) { 
+
+
+            _receitaIngredientesRepository = receitaIngredientesRepository;
         }
 
         // GET: api/ReceitaIngredientes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ReceitaIngredientes>>> GetReceitaIngredientes()
+        public IEnumerable<ReceitaIngredientes> GetReceitaIngredientes()
         {
-            return await _context.ReceitaIngredientes.ToListAsync();
+          
+            return _receitaIngredientesRepository.All();   
         }
 
         // GET: api/ReceitaIngredientes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ReceitaIngredientes>> GetReceitaIngredientes(int id)
+        public ReceitaIngredientes GetReceitaIngredientes(int id)
         {
-            var receitaIngredientes = await _context.ReceitaIngredientes.FindAsync(id);
+            
+            var receitaIngredientes = _receitaIngredientesRepository.Get(id);
 
-            if (receitaIngredientes == null)
-            {
-                return NotFound();
-            }
-
+            
             return receitaIngredientes;
         }
 
         // PUT: api/ReceitaIngredientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReceitaIngredientes(int receitaId,int ingredienteId, ReceitaIngredientes receitaIngredientes)
+        public void PutReceitaIngredientes(int receitaId,int ingredienteId, ReceitaIngredientes receitaIngredientes)
         {
             if (receitaId != receitaIngredientes.ReceitasId || ingredienteId != receitaIngredientes.IngredientesId)
             {
-                return BadRequest();
+                return;
             }
-
-            _context.Entry(receitaIngredientes).State = EntityState.Modified;
-
+                                    
             try
             {
-                await _context.SaveChangesAsync();
+                _receitaIngredientesRepository.Update(receitaIngredientes);
+
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReceitaIngredientesExists(receitaId,ingredienteId))
-                {
-                    return NotFound();
-                }
-                else
-                {
+              
                     throw;
-                }
+                
             }
 
-            return NoContent();
+            return;
         }
 
         // POST: api/ReceitaIngredientes
@@ -77,9 +71,8 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpPost]
         public async Task<ActionResult<ReceitaIngredientes>> PostReceitaIngredientes(ReceitaIngredientes receitaIngredientes)
         {
-            _context.ReceitaIngredientes.Add(receitaIngredientes);
-            await _context.SaveChangesAsync();
-
+            _receitaIngredientesRepository.Add(receitaIngredientes);
+            
             return CreatedAtAction("GetReceitaIngredientes", new { id = receitaIngredientes.ReceitasId }, receitaIngredientes);
         }
 
@@ -87,21 +80,14 @@ namespace Projeto_CodeDeveloper_24.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReceitaIngredientes(int id)
         {
-            var receitaIngredientes = await _context.ReceitaIngredientes.FindAsync(id);
-            if (receitaIngredientes == null)
-            {
-                return NotFound();
-            }
-
-            _context.ReceitaIngredientes.Remove(receitaIngredientes);
-            await _context.SaveChangesAsync();
+            _receitaIngredientesRepository.Delete(id);
 
             return NoContent();
         }
 
         private bool ReceitaIngredientesExists(int receitaId, int ingredienteId)
         {
-            return _context.ReceitaIngredientes.Any(e => e.ReceitasId == receitaId && e.IngredientesId == ingredienteId);
+            return _receitaIngredientesRepository.All().Any(e => e.ReceitasId == receitaId && e.IngredientesId == ingredienteId);
         }
     }
 }

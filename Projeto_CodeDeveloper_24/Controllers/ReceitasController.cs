@@ -15,12 +15,12 @@ namespace Projeto_CodeDeveloper_24.Controllers
     public class ReceitasController : ControllerBase
     {
         private readonly IRepository<Receitas> _receitasRepositorio;
-        private readonly IRepository<Ingredientes> _ingredientesRepositorio;
+        //private readonly IRepository<Ingredientes> _ingredientesRepositorio;
 
-        public ReceitasController(IRepository<Receitas> receitasRepositorio, IRepository<Ingredientes> ingredientesRepositorio)
+        public ReceitasController(IRepository<Receitas> receitasRepositorio)
         {
             _receitasRepositorio = receitasRepositorio;
-            _ingredientesRepositorio = ingredientesRepositorio;
+            //_ingredientesRepositorio = ingredientesRepositorio;
         }
 
         // GET: api/Receitas
@@ -92,7 +92,7 @@ namespace Projeto_CodeDeveloper_24.Controllers
         {
             _receitasRepositorio.Delete(id);
 
-            return Ok();
+            return NoContent();
         }
 
         private bool ReceitasExists(int id)

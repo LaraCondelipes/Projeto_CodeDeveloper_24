@@ -25,6 +25,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepository<Receitas>, ReceitasRepository>();
 builder.Services.AddScoped<IRepository<Ingredientes>, IngredientesRepository>();
+builder.Services.AddScoped<IRepository<Categorias>, CategoriasRepository>();
+builder.Services.AddScoped<IRepository<ReceitaIngredientes>, ReceitaIngredientesRepository>();
 
 var app = builder.Build();
 

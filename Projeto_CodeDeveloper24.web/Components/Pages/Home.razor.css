@@ -2,9 +2,18 @@
 }
 
 .card {
+
 margin: 6rem;
 }
 .form-control {
     width: 13rem;
     margin-left: 6rem;
+}
+
+.mensajeError {
+margin: 6rem;
+}
+
+.d-flex {
+margin-bottom: 5rem;
 }

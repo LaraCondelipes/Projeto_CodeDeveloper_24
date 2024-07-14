@@ -17,39 +17,44 @@
     </button>
 </form>
 
-
-@foreach (var receita in receitasPesquisa)
+@if (receitasPesquisa.Any())
 {
+    @foreach (var receita in receitasPesquisa)
+    {
 
-      <div class="row">
-        <div class="col">
-            <div class="card" style="width: 20rem; height: 22rem">
+        <div class="row">
+            <div class="col">
+                <div class="card" style="width: 20rem; height: 22rem">
 
-                <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
-                     class="card-img-top"
-                     style="height: 200px"
-                     alt="receita" />
-                <div class="card-body">
-                    <p class="card-text">@receita.Titulo</p>
-                    <p class="card-text">@receita.Descricao</p>
+                    <img src="https://www.pingodoce.pt/wp-content/uploads/2023/04/como-confecionar-peixe.jpg"
+                         class="card-img-top"
+                         style="height: 200px"
+                         alt="receita" />
+                    <div class="card-body">
+                        <p class="card-text">@receita.Titulo</p>
 
-                    <button class="btn btn-outline-success" @onclick="()=>VisualizarReceita(receita.Id)">
-                        Visualizar
-                    </button>
-                    <button type="button" class="btn btn-outline-success" @onclick="()=>DeleteItem(receita)">Remover</button>
+                        <p class="card-text">@receita.Duracao<label>m</label></p>
+                        
+                        
+                        <button class="btn btn-outline-success" @onclick="()=>VisualizarReceita(receita.Id)">
+                            Visualizar
+                        </button>
+                        <button type="button" class="btn btn-outline-success" @onclick="()=>DeleteItem(receita)">Remover</button>
+                    </div>
                 </div>
+
             </div>
 
-    </div>
-    
-  </div>
+        </div>
 
-    
-         
-          
-        
-       
+    }
+
 }
+else
+{
+<p class="mensajeError">Receita não encontrada!</p>    
+}
+
 
 @code{
     public  List<Receitas>? receitas = new List<Receitas>();
@@ -84,7 +89,7 @@
         }
         else
         {
-            receitasPesquisa = receitas.Where(x => x.Titulo.Contains(pesquisa) || x.Dificuldade.Contains(pesquisa)).ToList();
+            receitasPesquisa = receitas.Where(x => x.Titulo.ToLower().Contains(pesquisa.ToLower())).ToList();
         }
        
     }

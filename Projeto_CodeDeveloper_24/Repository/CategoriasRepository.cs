@@ -11,12 +11,12 @@ public class CategoriasRepository : IRepository<Categorias>
         this.context = context;
     }
 
-    public IEnumerable<Categorias> GetAll()
+    IEnumerable<Categorias> IRepository<Categorias>.All()
     {
         return context
-            .Categorias
-            .Include(b => b.Receitas)
-            .ToList();
+           .Categorias
+           .Include(b => b.Receitas)
+           .ToList();
     }
 
     public Categorias? Get(int id)
@@ -52,10 +52,7 @@ public class CategoriasRepository : IRepository<Categorias>
         }
     }
 
-    IEnumerable<Categorias> IRepository<Categorias>.All()
-    {
-        throw new NotImplementedException();
-    }
+ 
 
    
 }

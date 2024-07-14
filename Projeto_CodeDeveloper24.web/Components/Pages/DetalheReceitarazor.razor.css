@@ -2,10 +2,28 @@
 }
 .card {
     margin: 6rem;
-    width: 13rem;
+    width: contain;
+    height: contain;
     margin-left: 6rem;
+}
+
+.card-text {
+
 }
 h3 {
     width: 13rem;
     margin-left: 6rem;
+}
+
+.dificuldade {
+margin: 1rem;
+}
+
+.duracao {
+margin: 1rem;
+}
+
+.button {
+margin-bottom: 2rem;
+
 }

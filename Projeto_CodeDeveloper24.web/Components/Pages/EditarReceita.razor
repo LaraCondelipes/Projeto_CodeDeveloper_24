@@ -50,13 +50,18 @@ else
             <label>min.</label>
 
         </div>
-        <button type="submit" class=" button btn btn-outline-danger">
-            Submeter
-        </button>
         @if (aSubmeter)
         {
             <p>Receita submetida</p>
         }
+        <button type="submit" class=" button btn btn-outline-danger">
+            Submeter
+        </button>
+
+        <button type="submit" class=" button btn btn-outline-warning" @onclick="()=>IrParaHome()">
+            Home
+        </button>
+      
 
 </EditForm>
 }
@@ -145,9 +150,8 @@ else
             Console.WriteLine(ex.Message);
             throw;
         }
-        //chama a api para criar nova receita
         
-        aSubmeter = false;
+        //aSubmeter = false;
     }
 
     //Quando se seleciona o ingrediente na drop guarda o id do ingrediente
@@ -169,6 +173,9 @@ else
         receita.CategoriasId = Convert.ToInt32(e.Value);
     }
 
-  
+    private void IrParaHome()
+    {
+        navigationManager.NavigateTo($"/");
+    }
 
 }
